@@ -1,0 +1,6 @@
+luffy 18
+zero  30
+nami  20
+sanji 25
+robin 35
+usopp 20
