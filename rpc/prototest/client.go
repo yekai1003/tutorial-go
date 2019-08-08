@@ -24,7 +24,7 @@ func main() {
 	}
 	fmt.Println(reply)
 
-	var reply1 = &goprotoc.MethodVal{}
+	var reply1 = &goprotoc.MethodReply{}
 	var param1 = &goprotoc.MethodVal{
 		Method: "mul",
 		X:      10,
