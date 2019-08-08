@@ -1,0 +1,14 @@
+syntax = "proto3";//默认使用proto2编译 protoc-gen-go 插件需要安装  protoc 需要安装
+package go0808;
+
+message MethodParam {
+	string method = 1; //add,sub,mul,div 
+	int32 x = 2;
+	int32 y = 3;
+}
+
+message MethodReply {
+	string msg = 1;
+	int32 code = 2;
+	int32 reply = 3;
+}
