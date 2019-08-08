@@ -1,0 +1,12 @@
+syntax = "proto3";
+package goprotoc;
+message MsgValue {
+    string value = 1;
+}
+
+message MethodVal {
+	string method = 1;
+	int32 x = 2;
+	int32 y = 3;
+	int32 reply = 4;
+}
