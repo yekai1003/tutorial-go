@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"regexp"
 
-	"strings"
+	//"strings"
 
 	"github.com/axgle/mahonia"
 )
@@ -82,13 +82,14 @@ func parseOneGame(body string) *GameInfo {
 
 	pkreg := regexp.MustCompile("<a href=.+data-ao=.+>(.+?)</a><a href=")
 	pkdata := pkreg.FindAllStringSubmatch(data[6][0], 1)
-	fmt.Println(pkdata[0])
+	//fmt.Println(pkdata[0])
 	game.pankou = pkdata[0][1]
 
 	fidreg := regexp.MustCompile(`fid="([\d]+)"`)
 	fiddata := fidreg.FindAllStringSubmatch(body, -1)
 	//fmt.Println(fiddata)
 	game.gameid = fiddata[0][1]
+	game.fenxiurl = fmt.Sprintf("http://odds.500.com/fenxi/shuju-%s.shtml", game.gameid)
 	fmt.Printf("%+v\n", game)
 	return game
 }
@@ -112,14 +113,19 @@ func parseOneGame(body string) *GameInfo {
 */
 
 func parseHtml(body string) {
-	strings.Replace(body, "\n", "", -1)
+	//strings.Replace(body, "\n", "", -1)
 
-	//bsinforex := regexp.MustCompile("<tr id=\"(.+)>(.*)<td>(.*?)</td>(.*)</tr>")
-	bsinforex := regexp.MustCompile("<tr id=\"(?s:(.+?))</tr>")
+	bsinforeg := regexp.MustCompile("<tr id=\"(?s:(.+?))</tr>")
 	//fmt.Println(body)
-	infos := bsinforex.FindAllString(body, -1)
+	infos := bsinforeg.FindAllString(body, -1)
+
+	for _, v := range infos {
+		//fmt.Println(k, v, "\n\n\n")
+		parseOneGame(v)
+	}
+
 	//fmt.Println(infos[0])
-	parseOneGame(infos[0])
+	//parseOneGame(infos[0])
 }
 
 func parseOdds(body string) {
@@ -144,7 +150,7 @@ func main() {
 	//fmt.Println(utf8_body)
 	//fmt.Println(decoder.ConvertString(string(body)))
 	parseHtml(utf8_body)
-	parseOdds(utf8_body)
+	//parseOdds(utf8_body)
 	return
 
 }
