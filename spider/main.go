@@ -111,7 +111,7 @@ func parseHtml(body string) {
 	for _, v := range games {
 		//fmt.Println(k, v, "\n\n\n")
 		parseGame(v)
-
+		//go parseereryGame()
 	}
 }
 
