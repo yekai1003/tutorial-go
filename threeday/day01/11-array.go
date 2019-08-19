@@ -1,7 +1,7 @@
 /*
    author:Yekai
    company:Pdj
-   filename:10-func-closure.go
+   filename:11-array.go
 */
 
 package main
@@ -17,4 +17,5 @@ func main() {
 	fmt.Println(a1)
 	s1 := [4]string{"yekai", "fuhongxue", "luxiaojia"} //元素个数不能超过数组个数
 	fmt.Println(s1)
+
 }
