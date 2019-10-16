@@ -11,16 +11,16 @@ import (
 
 //区块结构
 type Block struct {
-	Timestamp     int64  //时间戳
-	Data          []byte //模拟交易数据
-	PrevBlockHash []byte //前一区块的hash值
-	Hash          []byte //本区块hash值
+	Timestamp     int64          //时间戳
+	Transactions  []*Transaction //模拟交易数据
+	PrevBlockHash []byte         //前一区块的hash值
+	Hash          []byte         //本区块hash值
 	Nonce         int
 }
 
 //构造block的函数
-func NewBlock(data string, prevHash []byte) *Block {
-	block := &Block{time.Now().Unix(), []byte(data), prevHash, []byte{}, 0}
+func NewBlock(txs []*Transaction, prevHash []byte) *Block {
+	block := &Block{time.Now().Unix(), txs, prevHash, []byte{}, 0}
 	//block.SetHash() //设置hash值
 
 	pow := NewProofOfWork(block)
@@ -31,15 +31,28 @@ func NewBlock(data string, prevHash []byte) *Block {
 	return block
 }
 
+//将block的交易转化为hash值
+func (b *Block) HashTransactions() []byte {
+	var txHashes [][]byte
+	var txHash [32]byte
+
+	for _, tx := range b.Transactions {
+		txHashes = append(txHashes, tx.ID)
+	}
+	txHash = sha256.Sum256(bytes.Join(txHashes, []byte{}))
+
+	return txHash[:]
+}
+
 //构造创世块区块
-func NewGenesisBlock() *Block {
-	return NewBlock("Genesis Block", []byte{})
+func NewGenesisBlock(coinbase *Transaction) *Block {
+	return NewBlock([]*Transaction{coinbase}, []byte{})
 }
 
 //计算哈希值
 func (b *Block) SetHash() {
 	timestamp := []byte(strconv.FormatInt(b.Timestamp, 10))
-	headers := bytes.Join([][]byte{b.PrevBlockHash, b.Data, timestamp}, []byte{})
+	headers := bytes.Join([][]byte{b.PrevBlockHash, b.HashTransactions(), timestamp}, []byte{})
 	hash := sha256.Sum256(headers)
 	b.Hash = hash[:]
 }
